@@ -8,6 +8,7 @@ const articles = [];
 const index = new Map();
 const pages = new Map();
 const CACHE = './.cache.json';
+const API_KEY = process.env.API_KEY || '';
 
 if (FS.existsSync(CACHE)) {
   try {
@@ -97,6 +98,14 @@ function updateArticles() {
 
 const server = require('http').createServer(async function (request, response) {
   const url = URL.parse(request.url);
+
+  if (url.pathname.startsWith('/update') && API_KEY) {
+    const key = url.pathname.slice('/update/'.length);
+    if (key === API_KEY) {
+      require('child_process').execSync('git pull --rebase');
+      updateArticles();
+    }
+  }
 
   if (url.pathname === '/') {
     response.writeHead(200);
