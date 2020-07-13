@@ -6,8 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>%title% - esp8266 blog</title>
 
-  <!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" /> -->
-  <!-- <link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.1/normalize.css" /> -->
   <style>
     .skip-to-content { position: absolute; left: -999px; }
     .skip-to-content:focus { left: auto; }
@@ -71,11 +69,20 @@
       margin: auto;
     }
 
-    .page {
-      display: flex;
+    .page { display: flex; }
+    main { width: 60%; }
+
+    @media screen and (max-width: 768px) {
+      .page { display: block; }
+      header, .page {
+        width: 90%;
+        max-width: none;
+      }
+
+      main { width: 100%; }
     }
 
-    main { width: 60%; }
+
 
     article {
       box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
