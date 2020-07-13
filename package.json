@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/esp8266-blog/blog/issues"
   },
-  "homepage": "https://github.com/esp8266-blog/blog#readme"
+  "homepage": "https://github.com/esp8266-blog/blog#readme",
+  "dependencies": {
+    "glob": "^7.1.6",
+    "request": "^2.88.2"
+  }
 }

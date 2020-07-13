@@ -2,31 +2,115 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>esp8266 blog</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>%title% - esp8266 blog</title>
+
+  <!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" /> -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.1/normalize.css" /> -->
+  <style>
+    .skip-to-content { position: absolute; left: -999px; }
+    .skip-to-content:focus { left: auto; }
+
+    /* https://type-scale.com/ */
+    @import url('https://fonts.googleapis.com/css?family=Poppins:400|Poppins:400');
+
+    html {font-size: 100%;} /*16px*/
+
+    body {
+      background-color: #daae2b;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      line-height: 1.65;
+      color: #212121;
+      margin: 0;
+      padding: 0;
+    }
+
+    p {margin-bottom: 1.15rem;}
+
+    h1, h2, h3, h4, h5 {
+      margin: 2.75rem 0 1.05rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 3.052em;
+    }
+    h2 {font-size: 2.441em;}
+    h3 {font-size: 1.953em;}
+    h4 {font-size: 1.563em;}
+    h5 {font-size: 1.25em;}
+    small {font-size: 0.8em;}
+
+    /* */
+
+    :root {
+      --spacing: 1.5rem;
+      --max-width: 1200px;
+    }
+
+    a[href^="http"]::before {
+      opacity: 0.3;
+      content: '🔗';
+    }
+
+    header { padding: 1.5rem 0; }
+    header h1 { line-height: 1; }
+    header a {
+      color: #777;
+      text-decoration: none;
+    }
+
+    header, .page {
+      width: 75%;
+      max-width: var(--max-width);
+      margin: auto;
+    }
+
+    .page {
+      display: flex;
+    }
+
+    main { width: 60%; }
+
+    article {
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+      border-radius: .5rem;
+      padding: var(--spacing);
+      margin-bottom: var(--spacing);
+      background-color: white;
+    }
+
+    article.text { white-space: pre-wrap; }
+
+    aside {
+      background: rgba(237,242,247,var(--bg-opacity));
+      padding: 0 var(--spacing);
+    }
+
+    aside ul { list-style: none; margin: 0; padding: 0; }
+    aside a { color: #444 }
+    aside h2 { margin: 1rem 0 0; };
+  </style>
 </head>
 
 <body>
-
-    <main>
-        <article>
-            <header>
-                <h2 id="title-1">
-                    <a href="#title-1" class="text-white no-underline hover:text-gray-500">#</a>
-                    Title
-                </h2>
-            </header>
-            <section>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate aliquam natus illum? Delectus
-                repellendus harum placeat, optio assumenda explicabo fugit blanditiis dicta, dolorum ipsum deserunt
-                nulla quam id ullam pariatur.</section>
-        </article>
-
-    </main>
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+  <header>
+    <h1><a href="/">The esp8266 little blog</a></h1>
+  </header>
+  <div class="page">
+    <main id="main-content">%content%</main>
     <aside>
-        <nav></nav>
+      <nav>
+        <h2>More:</h2>
+        <ul>%nav%</ul>
+      </nav>
     </aside>
-    <script type="module" src="https://unpkg.com/@homebots/elements@0.6.0/index.js"></script>
+  </div>
 </body>
-
 </html>
