@@ -1,5 +1,7 @@
+#META title: 'Welcome', description: 'This blog is a quick reference and a source of information for esp8266 programming'
+
 Welcome!
----
+--
 
 Hello there! 👋
 

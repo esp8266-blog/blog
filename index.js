@@ -8,7 +8,6 @@ const articles = [];
 const index = new Map();
 const pages = new Map();
 const CACHE = './.cache.json';
-const API_KEY = process.env.API_KEY || '';
 
 if (FS.existsSync(CACHE)) {
   try {
@@ -37,16 +36,15 @@ function getMarkdownFor(article) {
     url: 'https://mdaas.homebots.io/',
     body: article.content
   },
-  (error, response, body) => {
-    if (!error && response.statusCode === 200) {
-      article.html = body;
-      saveCache();
-    }
-  });
+    (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        article.html = body;
+        saveCache();
+      }
+    });
 }
 
 function renderArticles(articles) {
-  articles.forEach(getMarkdownFor);
   return articles.map(article => `
     <article class="${article.html ? '' : 'text'}" id="${article.slug}">${article.html || article.content}</article>
   `).join('\n');
@@ -63,6 +61,16 @@ function cleanUpPath(path) {
   return Path.join(__dirname, path);
 }
 
+function render(articles) {
+  const meta = articles.length === 1 ? articles[0].meta : { title: 'Beep boop! Welcome!' };
+
+  return pages.get('index')
+    .replace('%content%', renderArticles(articles))
+    .replace('%nav%', renderNavLinks(articles))
+    .replace('%title%', meta.title)
+    .replace('%meta_description%', meta.description)
+}
+
 function updateArticles() {
   glob('articles/**/*.md', async (_, files) => {
     for (filePath of files) {
@@ -70,13 +78,21 @@ function updateArticles() {
       const fullPath = Path.join(__dirname, filePath);
       const contentBuffer = await FS.promises.readFile(fullPath);
       const stats = await FS.promises.stat(fullPath);
-      const content = contentBuffer.toString('utf8').trim();
-      const title = content.split('\n')[0].replace(/^[#]{1,}\s/, '') || slug;
+      const rawContent = contentBuffer.toString('utf8').trim();
       const lastModified = Number(stats.mtimeMs);
+      const metaString = rawContent.startsWith('#META') ? rawContent.slice(5, rawContent.indexOf('\n')) : '';
+      const content = metaString ? rawContent.slice(rawContent.indexOf('\n') + 1) : rawContent;
+      let meta = {};
+
+      try { meta = Function('return {' + metaString + '}')(); } catch { }
+
+      const title = meta.title || content.split('\n')[0].replace(/^[#]{1,}\s/, '') || slug;
+      meta.title = title;
 
       const article = {
         slug,
         title,
+        meta,
         content,
         lastModified,
       };
@@ -89,6 +105,8 @@ function updateArticles() {
         articles[articleIndex] = article;
         index.set(slug, article);
       }
+
+      getMarkdownFor(article);
     }
 
     articles.sort((a, b) => b.lastModified - a.lastModified);
@@ -101,13 +119,7 @@ const server = require('http').createServer(async function (request, response) {
 
   if (url.pathname === '/') {
     response.writeHead(200);
-
-    response.end(
-      pages.get('index')
-        .replace('%content%', renderArticles(articles.slice(0, 5)))
-        .replace('%nav%', renderNavLinks(articles))
-        .replace('%title%', 'Welcome!')
-    );
+    response.end(render(articles.slice(0, 5)));
     return;
   }
 
@@ -117,13 +129,7 @@ const server = require('http').createServer(async function (request, response) {
     if (index.has(slug)) {
       const article = index.get(slug);
       response.writeHead(200);
-
-      response.end(
-        pages.get('index')
-          .replace('%content%', renderArticles([article]))
-          .replace('%nav%', renderNavLinks(articles))
-          .replace('%title%', article.title)
-      );
+      response.end(render([article]));
       return;
     }
   }
