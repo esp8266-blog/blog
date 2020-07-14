@@ -1,2 +1,25 @@
-<div id="disqus_thread"></div>
+<div id="disqus_thread" class="article"></div>
 <script data-timestamp="" async defer src="https://esp8266.disqus.com/embed.js"></script>
+<style>
+  #disqus_thread::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 4rem;
+    width: 2rem;
+    height: 2rem;
+    background: inherit;
+    transform: translateY(-1rem) rotate(45deg);
+  }
+
+  #disqus_thread {
+    margin-top: 4rem;
+  }
+
+  @media screen and (min-width: 990px) {
+    #disqus_thread {
+      margin-left: 5rem;
+    }
+  }
+</style>

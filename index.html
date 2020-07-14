@@ -81,7 +81,7 @@
     .page { display: flex; }
     main { width: 60%; }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 989px) {
       .page { display: block; }
       header, .page {
         width: 90%;
@@ -91,30 +91,13 @@
       main { width: 100%; }
     }
 
-    article, #disqus_thread {
+    article, .article {
       box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
       border-radius: .5rem;
       padding: var(--spacing);
       margin-bottom: var(--spacing);
       background-color: white;
       position: relative;
-    }
-
-    #disqus_thread {
-      margin-left: 5rem;
-      margin-top: 4rem;
-    }
-
-    #disqus_thread::before {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 4rem;
-      width: 2rem;
-      height: 2rem;
-      background: inherit;
-      transform: translateY(-1rem) rotate(45deg);
     }
 
     article.text { white-space: pre-wrap; }
