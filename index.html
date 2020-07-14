@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="title" content="%meta_title%" />
   <meta name="description" content="%meta_description%" />
   <meta name="robots" content="index, follow" />
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -88,7 +89,7 @@
       main { width: 100%; }
     }
 
-    article {
+    article, #disqus_thread {
       box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
       border-radius: .5rem;
       padding: var(--spacing);
@@ -97,16 +98,21 @@
       position: relative;
     }
 
-    article::after {
+    #disqus_thread {
+      margin-left: 5rem;
+      margin-top: 4rem;
+    }
+
+    #disqus_thread::before {
       content: '';
       display: block;
       position: absolute;
-      bottom: 0;
-      right: 3rem;
+      top: 0;
+      right: 4rem;
       width: 2rem;
       height: 2rem;
       background: inherit;
-      transform: translateY(1rem) rotate(45deg);
+      transform: translateY(-1rem) rotate(45deg);
     }
 
     article.text { white-space: pre-wrap; }
@@ -128,7 +134,10 @@
     <h1><a href="/">The esp8266 little blog</a></h1>
   </header>
   <div class="page">
-    <main id="main-content">%content%</main>
+    <main id="main-content">
+      %content%
+      %disqus%
+    </main>
     <aside>
       <nav>
         <h2>More:</h2>

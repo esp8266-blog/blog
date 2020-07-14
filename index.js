@@ -6,12 +6,12 @@ const request = require('request');
 
 const articles = [];
 const index = new Map();
-const pages = new Map();
-const CACHE = './.cache.json';
+const assetsCache = new Map();
+const ARTICLE_CACHE = './.cache.json';
 
-if (FS.existsSync(CACHE)) {
+if (FS.existsSync(ARTICLE_CACHE)) {
   try {
-    const cacheData = FS.readFileSync(CACHE);
+    const cacheData = FS.readFileSync(ARTICLE_CACHE);
     const cache = JSON.parse(cacheData);
 
     cache.forEach(article => {
@@ -26,7 +26,7 @@ if (FS.existsSync(CACHE)) {
 }
 
 function saveCache() {
-  FS.writeFileSync(CACHE, JSON.stringify(articles, null, 2));
+  FS.writeFileSync(ARTICLE_CACHE, JSON.stringify(articles, null, 2));
 }
 
 function getMarkdownFor(article) {
@@ -62,13 +62,20 @@ function cleanUpPath(path) {
 }
 
 function render(articles) {
-  const meta = articles.length === 1 ? articles[0].meta : { title: 'Beep boop! Welcome!' };
+  const singleArticle = articles.length === 1;
+  const meta = singleArticle ? articles[0].meta : { title: 'Beep boop! Welcome!' };
 
-  return pages.get('index')
+  let page = assetsCache.get('index')
     .replace('%content%', renderArticles(articles))
     .replace('%nav%', renderNavLinks(articles))
     .replace('%title%', meta.title)
+    .replace('%meta_title%', meta.title)
     .replace('%meta_description%', meta.description)
+    .replace('%disqus%', singleArticle ? assetsCache.get('assets/disqus.html') : '')
+
+  assetsCache.forEach((value, key) => page = page.replace('%' + key + '%', value));
+
+  return page;
 }
 
 function updateArticles() {
@@ -135,11 +142,19 @@ const server = require('http').createServer(async function (request, response) {
   }
 
   response.writeHead(404, 'Bleep!');
-  response.end(pages.get('404'));
+  response.end(assetsCache.get('404'));
 });
 
-FS.readFile(cleanUpPath('404.html'), (_, buffer) => pages.set('404', buffer.toString('utf-8')));
-FS.readFile(cleanUpPath('index.html'), (_, buffer) => pages.set('index', buffer.toString('utf-8')));
+function loadCachedPage(filePath, cacheKey) {
+  FS.readFile(cleanUpPath(filePath), (_, buffer) => assetsCache.set(cacheKey, buffer.toString('utf-8')));
+}
+
+loadCachedPage('404.html', '404');
+loadCachedPage('index.html', 'index');
+
+glob('assets/*', async (_, files) => {
+  files.forEach(file => loadCachedPage(file, file));
+});
 
 updateArticles();
 
