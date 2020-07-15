@@ -7,12 +7,18 @@
   <meta name="title" content="%meta_title%" />
   <meta name="description" content="%meta_description%" />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#daae2b"/>
+  <meta name="theme-color" content="%theme%" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <title>%title% - esp8266.blog</title>
 
-  %assets/ga.html%
+  <% assets/ga.html %>
+
   <style>
+    :root {
+      --spacing: 1.5rem;
+      --max-width: 1200px;
+    }
     .skip-to-content { position: absolute; left: -999px; }
     .skip-to-content:focus { left: auto; }
 
@@ -22,7 +28,7 @@
     html {font-size: 100%;} /*16px*/
 
     body {
-      background-color: #daae2b;
+      background-color: %theme%;
       font-family: 'Poppins', sans-serif;
       font-weight: 400;
       line-height: 1.65;
@@ -40,13 +46,8 @@
       line-height: 1.15;
     }
 
-    h1:first-child, h2:first-child {
-      margin-top: 0;
-    }
-
-    h1 {
-      font-size: 3.052em;
-    }
+    h1:first-child, h2:first-child { margin-top: 0; }
+    h1 {font-size: 3.052em;}
     h2 {font-size: 2.441em;}
     h3 {font-size: 1.953em;}
     h4 {font-size: 1.563em;}
@@ -54,15 +55,9 @@
     small {font-size: 0.8em;}
 
     /* */
-
-    :root {
-      --spacing: 1.5rem;
-      --max-width: 1200px;
-    }
-
-    a[href^="http"]::before {
-      opacity: 0.3;
-      content: '🔗';
+    img {
+      max-width: 100%;
+      display: block;
     }
 
     header { padding: 1.5rem 0; }
@@ -110,6 +105,19 @@
     aside ul { list-style: none; margin: 0; padding: 0; }
     aside a { color: #444 }
     aside h2 { margin: 1rem 0 0; };
+    .hidden { display: none; }
+
+    .btn {
+      padding: .5rem 1.5rem;
+      font-size: 1.25em;
+      border-radius: 3px;
+    }
+
+    .btn--primary {
+      border: 0;
+      background: %theme%;
+    }
+
   </style>
 </head>
 
